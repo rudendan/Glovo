@@ -4,59 +4,50 @@ import com.example.glovo.model.Order;
 import com.example.glovo.model.Product;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class OrderService {
 
-    private List<Order> orders = new ArrayList<>();
+    private Map<Integer, Order> orders = new HashMap<>();
 
-    public OrderService() {
-        orders.add(new Order(new ArrayList<>(List.of(
-                    new Product(1001, "SomeProduct1", 1001.0F),
-                    new Product(1002, "SomeProduct2", 1002.0F)))));
-        orders.add(new Order(new ArrayList<>(List.of(
-                            new Product(1003, "SomeProduct3", 1004.0F),
-                            new Product(1004, "SomeProduct4", 1004.0F)))));
-    }
 
     public List<Order> getAll() {
-        return orders;
+        return new ArrayList<>(orders.values());
     }
 
-    public Order getOrderById(int id) {
+    public Order get(int id) {
 
-        return orders.stream()
+        return orders.values().stream()
                 .filter(order -> order.getId() == id)
-                .findFirst().orElse(null);
+                .findFirst().orElseThrow();
     }
 
-    public List<Order> createOrder(List<Product> products) {
-        orders.add(new Order(products));
-        return orders;
+    public Order create(List<Product> products) {
+        Order order = new Order(Order.generateId++, LocalDate.now(), new ArrayList<>(products));
+        orders.put(order.getId(), order);
+        return order;
     }
 
-    public List<Order> addProductToOrder(int orderId, Product product) {
-        orders.stream()
-                .filter(order -> order.getId() == orderId)
-                .findFirst()
-                .ifPresent(order -> {
-                    order.getProducts().add(product);
-                    order.setCost(order.getCost() + product.getCost());
-                });
-
-        return orders;
+    public Order addProduct(int orderId, Product product) {
+        Order order = orders.get(orderId);
+        order.getProducts().add(product);
+        return order;
     }
 
-    public List<Order> removeOrder(int orderId) {
-        orders.removeIf(order -> order.getId() == orderId);
-        return orders;
+    public List<Order> delete(int orderId) {
+        orders.remove(orderId);
+        return new ArrayList<>(orders.values());
     }
 
-    public void removeProductInOrder(int orderId, int productId) {
+    public Order remove(int orderId, int productId) {
+        Order order = orders.get(orderId);
+        order.getProducts().stream()
+                .filter(product -> product.getId() == productId)
+                .findFirst().ifPresent(product -> order.getProducts().remove(product));
 
+        return order;
     }
 }
 

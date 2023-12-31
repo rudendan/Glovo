@@ -1,15 +1,10 @@
 package com.example.glovo.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Order {
     // id, date, cost, products
 
@@ -18,11 +13,11 @@ public class Order {
     private float cost;
     private List<Product> products;
 
-    private static int generateId = 1000;
+    public static int generateId = 1000;
 
-    public Order(List<Product> products) {
-        this.id = generateId++;
-        this.date = LocalDate.now();
+    public Order(int id, LocalDate date, List<Product> products) {
+        this.id = id;
+        this.date = date;
         this.products = products;
 
         for (Product product : products) {

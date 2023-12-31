@@ -1,5 +1,6 @@
 package com.example.glovo.controller;
 
+import com.example.glovo.convertor.ProductDtoConverter;
 import com.example.glovo.dto.ProductDto;
 import com.example.glovo.dto.OrderDto;
 import com.example.glovo.model.Order;
@@ -24,21 +25,32 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public Order get(@PathVariable int id) {
-        return orderService.getOrderById(id);
+        return orderService.get(id);
     }
 
     @PostMapping
-    public List<Order> create(@RequestBody OrderDto createOrder) {
-        return orderService.createOrder(createOrder.getProducts());
+    public Order create(@RequestBody OrderDto createOrder) {
+        return orderService.create(createOrder.getProducts().stream().map(ProductDtoConverter::toProduct).toList());
     }
 
-    @PatchMapping
-    public List<Order> add(@RequestBody ProductDto product) {
-        return orderService.addProductToOrder(product.getOrderId(), product.getProduct());
+    @PatchMapping("/{id}")
+    public Order add(@PathVariable int id, @RequestBody ProductDto product) {
+        return orderService.addProduct(id, ProductDtoConverter.toProduct(product));
     }
 
     @DeleteMapping("/{id}")
     public List<Order> delete(@PathVariable int id) {
-        return orderService.removeOrder(id);
+        return orderService.delete(id);
     }
+
+    @DeleteMapping("/{orderId}/{productID}")
+    public Order remove(@PathVariable int orderId, @PathVariable int productID) {
+        return orderService.remove(orderId, productID);
+    }
+
+//    @Override
+//    @DeleteMapping("/{orderId}/{name}")
+//    public List<Order> remove(@PathVariable int orderId, String productId) {
+//        return orderService.remove(orderId, productId);
+//    }
 }
