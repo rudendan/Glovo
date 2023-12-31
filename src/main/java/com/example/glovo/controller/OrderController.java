@@ -29,8 +29,13 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order create(@RequestBody OrderDto createOrder) {
-        return orderService.create(createOrder.getProducts().stream().map(ProductDtoConverter::toProduct).toList());
+    public Order create(@RequestBody OrderDto order) {
+        return orderService.create(order.getProducts().stream().map(ProductDtoConverter::toProduct).toList());
+    }
+
+    @PutMapping("/{id}")
+    public Order change(@PathVariable int id, @RequestBody OrderDto order) {
+        return orderService.change(id, order.getProducts().stream().map(ProductDtoConverter::toProduct).toList());
     }
 
     @PatchMapping("/{id}")
@@ -43,8 +48,8 @@ public class OrderController {
         return orderService.delete(id);
     }
 
-    @DeleteMapping("/{orderId}/{productID}")
-    public Order remove(@PathVariable int orderId, @PathVariable int productID) {
-        return orderService.remove(orderId, productID);
+    @DeleteMapping("/{id}/{productID}")
+    public Order remove(@PathVariable int id, @PathVariable int productID) {
+        return orderService.remove(id, productID);
     }
 }
