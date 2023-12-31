@@ -47,10 +47,4 @@ public class OrderController {
     public Order remove(@PathVariable int orderId, @PathVariable int productID) {
         return orderService.remove(orderId, productID);
     }
-
-//    @Override
-//    @DeleteMapping("/{orderId}/{name}")
-//    public List<Order> remove(@PathVariable int orderId, String productId) {
-//        return orderService.remove(orderId, productId);
-//    }
 }
