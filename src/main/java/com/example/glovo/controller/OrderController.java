@@ -35,7 +35,7 @@ public class OrderController {
 
     @PutMapping("/{id}")
     public Order change(@PathVariable int id, @RequestBody OrderDto order) {
-        return orderService.change(id, order.getProducts().stream().map(ProductDtoConverter::toProduct).toList());
+        return orderService.update(id, order.getProducts().stream().map(ProductDtoConverter::toProduct).toList());
     }
 
     @PatchMapping("/{id}")

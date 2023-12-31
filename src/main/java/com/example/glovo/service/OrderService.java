@@ -1,6 +1,5 @@
 package com.example.glovo.service;
 
-import com.example.glovo.dto.ProductDto;
 import com.example.glovo.model.Order;
 import com.example.glovo.model.Product;
 import org.springframework.stereotype.Service;
@@ -19,10 +18,7 @@ public class OrderService {
     }
 
     public Order get(int id) {
-
-        return orders.values().stream()
-                .filter(order -> order.getId() == id)
-                .findFirst().orElseThrow();
+        return orders.get(id);
     }
 
     public Order create(List<Product> products) {
@@ -55,11 +51,12 @@ public class OrderService {
         return order;
     }
 
-    public Order change(int orderId, List<Product> products) {
+    public Order update(int orderId, List<Product> products) {
         Order order = orders.get(orderId);
         order.setProducts(products);
         float cost = 0.0f;
-        for (Product product : products) cost += product.getCost();
+        for (Product product : products)
+            cost += product.getCost();
         order.setCost(cost);
         return orders.replace(orderId, order);
     }
