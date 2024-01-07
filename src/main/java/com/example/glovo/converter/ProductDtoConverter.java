@@ -1,4 +1,4 @@
-package com.example.glovo.convertor;
+package com.example.glovo.converter;
 
 import com.example.glovo.dto.ProductDto;
 import com.example.glovo.model.Product;

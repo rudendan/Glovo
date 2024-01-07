@@ -1,6 +1,6 @@
 package com.example.glovo.controller;
 
-import com.example.glovo.convertor.ProductDtoConverter;
+import com.example.glovo.converter.ProductDtoConverter;
 import com.example.glovo.dto.ProductDto;
 import com.example.glovo.dto.OrderDto;
 import com.example.glovo.model.Order;
@@ -18,11 +18,6 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping
-    public List<Order> getAll() {
-        return orderService.getAll();
-    }
-
     @GetMapping("/{id}")
     public Order get(@PathVariable int id) {
         return orderService.get(id);
@@ -34,7 +29,7 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public Order change(@PathVariable int id, @RequestBody OrderDto order) {
+    public Order update(@PathVariable int id, @RequestBody OrderDto order) {
         return orderService.update(id, order.getProducts().stream().map(ProductDtoConverter::toProduct).toList());
     }
 

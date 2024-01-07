@@ -6,7 +6,6 @@ import java.util.List;
 
 @Data
 public class Order {
-    // id, date, cost, products
 
     private int id;
     private LocalDate date;
